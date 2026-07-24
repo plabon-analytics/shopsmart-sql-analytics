@@ -5,7 +5,7 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 
 ## Database Schema
 
-![ER Diagram](diagrams/shopsmart_er_diagram.png)
+![ER Diagram](diagrams/ER_diagram.png)
 
 **6 tables:**
 - `customers` — 50 Indian customers across 3 segments (Premium, Standard, Budget)
