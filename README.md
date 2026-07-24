@@ -39,7 +39,33 @@ represent ₹4.1L in recoverable revenue.
 
 ---
 
-*More analyses (MoM/YoY Growth, Cohort Analysis, Customer Retention, CLV) coming as this portfolio grows.*
+### 2. Month-over-Month & Year-over-Year Growth
+**Query:** [`queries/02_mom_yoy_growth.sql`](queries/02_mom_yoy_growth.sql)
+
+Tracks monthly revenue trends using LAG window functions for MoM 
+and YoY comparisons, plus a 3-month moving average and running 
+total for trend smoothing.
+
+**Key findings:**
+- Annual revenue grew from ₹7.36L (2022) to ₹8.71L (2025), with 
+  a dip in 2023 (-25.3%) followed by a strong recovery in 2024 (+39.9%)
+- Best single month was January 2022 (₹1.35L), sitting ₹72K above 
+  the overall monthly average
+- Revenue is highly volatile month-to-month (swings from +2,900% 
+  to -98%), driven by low monthly order volume (1-3 orders/month) — 
+  revenue is order-concentrated rather than a steady stream
+
+**Results:** [`results/monthly_growth_trends.csv`](results/monthly_growth_trends.csv) | [`results/best_month_analysis.csv`](results/best_month_analysis.csv) | [`results/declining_months.csv`](results/declining_months.csv)
+
+**Techniques used:**
+- LAG() for both 1-month (MoM) and 12-month (YoY) comparisons
+- Window-based 3-month moving average (ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
+- Running total via SUM() OVER()
+- CASE-based trend labeling (Growth/Decline/Flat/First Month)
+
+---
+
+*More analyses (Cohort Analysis, Customer Retention, CLV) coming as this portfolio grows.*
 
 ## Author
 
