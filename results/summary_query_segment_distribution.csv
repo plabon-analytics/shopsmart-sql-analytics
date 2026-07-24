@@ -1,0 +1,6 @@
+rfm_segment,customer_count,avg_spending,total_revenue,pct_of_customers
+Champion,5,344889.60,1724448.00,26.3
+"Loyal Customer",4,187170.25,748681.00,21.1
+"Potential Loyalist",3,143411.00,430233.00,15.8
+"At Risk",4,103393.25,413573.00,21.1
+Lost,3,6715.33,20146.00,15.8
