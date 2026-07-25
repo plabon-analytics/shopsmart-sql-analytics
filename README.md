@@ -29,7 +29,7 @@ NTILE(5) window functions and CASE-based scoring logic.
 (47% of customers) generate 74% of total revenue. At Risk customers 
 represent ₹4.1L in recoverable revenue.
 
-**Results:** [`results/summary_query_segment_distribution.csv`](results/summary_query_segment_distribution.csv) | [`results/ShopSmart_customer_segmentation.csv`](results/ShopSmart_customer_segmentation.csv)
+**Results:** [`results/01_summary_query_segment_distribution.csv`](results/01_summary_query_segment_distribution.csv) | [`results/01_ShopSmart_customer_segmentation.csv`](results/01_ShopSmart_customer_segmentation.csv)
 
 **Techniques used:**
 - 4 chained CTEs for readable, step-by-step logic
@@ -55,7 +55,7 @@ total for trend smoothing.
   to -98%), driven by low monthly order volume (1-3 orders/month) — 
   revenue is order-concentrated rather than a steady stream
 
-**Results:** [`results/monthly_growth_trends.csv`](results/monthly_growth_trends.csv) | [`results/best_month_analysis.csv`](results/best_month_analysis.csv) | [`results/declining_months.csv`](results/declining_months.csv)
+**Results:** [`results/02_monthly_growth_trends.csv`](results/02_monthly_growth_trends.csv) | [`results/02_best_month_analysis.csv`](results/02_best_month_analysis.csv) | [`results/02_declining_months.csv`](results/02_declining_months.csv)
 
 **Techniques used:**
 - LAG() for both 1-month (MoM) and 12-month (YoY) comparisons
