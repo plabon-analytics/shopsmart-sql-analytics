@@ -3,6 +3,22 @@
 A self-designed 6-table MySQL e-commerce database, built to practice 
 real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-Advanced-1e3a8a?style=flat-square)
+![Method](https://img.shields.io/badge/Method-RFM%20Segmentation-7c3aed?style=flat-square)
+![Framework](https://img.shields.io/badge/Framework-Cohort%20Analysis-0d9488?style=flat-square)
+![Status](https://img.shields.io/badge/Status-In%20Progress-16a34a?style=flat-square)
+![Git](https://img.shields.io/badge/Version%20Control-Git-F05032?style=flat-square&logo=git&logoColor=white)
+![Last Commit](https://img.shields.io/github/last-commit/plabon-analytics/shopsmart-sql-analytics?style=flat-square)
+
+---
+
+## Contents
+- [Database Schema](#database-schema)
+- [RFM Customer Segmentation](#1-rfm-customer-segmentation)
+- [MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
+- [Cohort Analysis](#3-cohort-analysis)
+
 ## Database Schema
 
 ![ER Diagram](diagrams/ER_diagram.png)
