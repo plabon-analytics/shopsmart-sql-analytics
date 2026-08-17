@@ -3,6 +3,22 @@
 A self-designed 6-table MySQL e-commerce database, built to practice 
 real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-Advanced-1e3a8a?style=flat-square)
+![Method](https://img.shields.io/badge/Method-RFM%20Segmentation-7c3aed?style=flat-square)
+![Framework](https://img.shields.io/badge/Framework-Cohort%20Analysis-0d9488?style=flat-square)
+![Status](https://img.shields.io/badge/Status-In%20Progress-16a34a?style=flat-square)
+![Git](https://img.shields.io/badge/Version%20Control-Git-F05032?style=flat-square&logo=git&logoColor=white)
+![Last Commit](https://img.shields.io/github/last-commit/plabon-analytics/shopsmart-sql-analytics?style=flat-square)
+
+---
+
+## Contents
+- [Database Schema](#database-schema)
+- [RFM Customer Segmentation](#1-rfm-customer-segmentation)
+- [MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
+- [Cohort Analysis](#3-cohort-analysis)
+
 ## Database Schema
 
 ![ER Diagram](diagrams/ER_diagram.png)
@@ -64,6 +80,43 @@ total for trend smoothing.
 - CASE-based trend labeling (Growth/Decline/Flat/First Month)
 
 ---
+
+### 3. Cohort Analysis
+**Query:** [`queries/03_cohort_analysis.sql`](queries/03_cohort_analysis.sql)
+
+Tracks customer retention by grouping customers into monthly cohorts 
+based on their first order, then measuring what percentage of each 
+cohort placed repeat orders in subsequent months using PERIOD_DIFF 
+for month-gap calculation.
+
+**Key findings:**
+- Retention drops sharply after month 0 across nearly all cohorts, 
+  with most repeat activity concentrated in a small number of 
+  long-tenured customers rather than spread evenly across each cohort
+- A handful of customers account for the majority of repeat orders 
+  seen months or even years after their first purchase
+
+**Note on cohort size:** This analysis uses a practice database of 50 
+customers designed to demonstrate SQL methodology, not to model 
+production-scale behavior. Most cohorts contain just 1-2 customers, 
+so individual purchase timing dominates the retention percentages — 
+this produces discontinuous month numbers rather than smooth curves. 
+The underlying technique (PERIOD_DIFF-based cohort tracking, retention 
+rate calculation) is identical to what's used on production data; 
+at larger scale, the same query would be expected to produce smoother, 
+more continuous retention trends.
+
+**Results:** [`results/03_cohort_retention.csv`](results/03_cohort_retention.csv) | [`results/03_cohort_pivot_heatmap.csv`](results/03_cohort_pivot_heatmap.csv)
+
+**Techniques used:**
+- PERIOD_DIFF() for calculating month-gap between first order and 
+  subsequent orders
+- Multi-CTE chain to build cohort assignment, activity counts, and 
+  retention percentages step by step
+- CASE-based pivot to reshape long-format retention data into a 
+  wide heatmap view (month 0, 1, 2, 3, 6, 9, 12, 16, 19, 24, 30)
+
+  ---
 
 *More analyses (Cohort Analysis, Customer Retention, CLV) coming as this portfolio grows.*
 
