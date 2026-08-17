@@ -1,0 +1,6 @@
+step_number,step_name,customers_count,total_signups,prev_step_customers,customers_lost,step_conversion_pct,overall_conversion_pct
+1,"Signed Up",50,50,0,NULL,NULL,100.0
+2,"Placed Any Order",21,50,50,29,42.0,42.0
+3,"Had Delivered Order",19,50,21,2,90.5,38.0
+4,"Repeat Purchase (2+ orders)",17,50,19,2,89.5,34.0
+5,"High Value (>₹50k spent)",16,50,17,1,94.1,32.0

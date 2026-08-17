@@ -78,3 +78,4 @@ SELECT
         NULLIF(total_active, 0), 1)                  AS new_reactivated_pct
 FROM monthly_retention
 ORDER BY month;
+
