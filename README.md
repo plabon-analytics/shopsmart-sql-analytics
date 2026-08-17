@@ -18,6 +18,7 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 - [RFM Customer Segmentation](#1-rfm-customer-segmentation)
 - [MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
 - [Cohort Analysis](#3-cohort-analysis)
+- [Retention Analysis](#4-retention-analysis)
 
 ## Database Schema
 
@@ -118,7 +119,7 @@ more continuous retention trends.
 
   ---
 
-  ### 4. Customer Retention Analysis
+### 4. Customer Retention Analysis
 **Query:** [`queries/04_retention_analysis.sql`](queries/04_retention_analysis.sql)
 
 Tracks month-by-month customer activity to measure true month-over-month 
