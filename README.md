@@ -118,7 +118,40 @@ more continuous retention trends.
 
   ---
 
-*More analyses (Cohort Analysis, Customer Retention, CLV) coming as this portfolio grows.*
+  ### 4. Customer Retention Analysis
+**Query:** [`queries/04_retention_analysis.sql`](queries/04_retention_analysis.sql)
+
+Tracks month-by-month customer activity to measure true month-over-month 
+retention — whether a customer who purchased in one calendar month also 
+purchased in the immediately following month.
+
+**Key finding:**
+0% of customer activity across all 55 months (Jan 2022 – May 2026) 
+qualifies as strict month-over-month retention — no customer in this 
+dataset made purchases in two consecutive calendar months. Verified 
+directly against raw order data (a standalone self-join check outside 
+the main query confirmed zero customer-pairs with back-to-back monthly 
+purchases), ruling out a query logic error.
+
+This reveals something concrete about purchase behavior in this dataset: 
+repeat customers exist (confirmed in the RFM and Cohort analyses), but 
+their reorder cycles are consistently spaced 2+ months apart. Strict 
+month-over-month retention is the wrong lens for this purchase pattern — 
+a bi-monthly or quarterly retention window would likely surface the 
+loyalty that these stricter monthly checks miss entirely.
+
+**Results:** [`results/04_retention_analysis_mom.csv`](results/04_retention_analysis_mom.csv)
+
+**Techniques used:**
+- Self-join with PERIOD_DIFF to detect exact 1-month purchase gaps
+- LEFT JOIN + CASE to classify each customer-month as Retained vs. 
+  New/Reactivated
+- Independent sanity-check query used to verify the result against 
+  raw order data before treating it as a finding, not a bug
+
+  ---
+
+*More analyses (Rolling Averages for Business KPIs, CLV, Market Basket Analysis) coming as this portfolio grows.*
 
 ## Author
 
