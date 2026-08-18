@@ -19,6 +19,7 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 - [MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
 - [Cohort Analysis](#3-cohort-analysis)
 - [Customer Retention Analysis](#4-customer-retention-analysis)
+- [Funnel Analysis](#5-funnel-analysis)
 
 ## Database Schema
 
@@ -42,7 +43,7 @@ Full schema: [`schema/shopsmart_setup.sql`](schema/shopsmart_setup.sql)
 Segments customers by Recency, Frequency, and Monetary value using 
 NTILE(5) window functions and CASE-based scoring logic.
 
-**Key finding:** Among 19 repeat customers, Champions and Loyal segments 
+**Key finding:** Among 19 repeat customers, the Champions and Loyal segments 
 (47% of customers) generate 74% of total revenue. At Risk customers 
 represent ₹4.1L in recoverable revenue.
 
@@ -151,6 +152,36 @@ loyalty that these stricter monthly checks miss entirely.
   raw order data before treating it as a finding, not a bug
 
   ---
+
+### 5. Funnel Analysis
+**Query:** [`queries/05_funnel_analysis.sql`](queries/05_funnel_analysis.sql)
+
+Tracks the customer journey through 5 stages — signup, first order, 
+delivered order, repeat purchase, and high-value status (>₹50k spent) — 
+using UNION ALL to build a funnel view with step-by-step and 
+overall conversion rates via LAG and FIRST_VALUE window functions.
+
+**Key findings:**
+- The steepest drop-off happens at the very first stage: only 42% of 
+  signed-up customers (21 of 50) ever placed an order — this is the 
+  single biggest leak in the funnel, larger than every later stage combined
+- Once a customer completes one delivered order, retention through the 
+  rest of the funnel is strong: 90.5% place a 2nd order, and 94.1% of 
+  repeat buyers cross ₹50k in total spend
+- The business implication: this dataset's growth problem is acquisition-
+  to-first-purchase conversion, not loyalty — customers who buy once 
+  are highly likely to become high-value repeat buyers
+
+**Results:** [`results/05_funnel_conversion.csv`](results/05_funnel_conversion.csv)
+
+**Techniques used:**
+- UNION ALL to stack 5 independently defined customer segments into 
+  one funnel table
+- LAG() for step-over-step conversion rate
+- FIRST_VALUE() for conversion rate relative to total signups
+- HAVING clauses to define repeat-purchase and high-value thresholds
+
+---
 
 *More analyses (Rolling Averages for Business KPIs, CLV, Market Basket Analysis) coming as this portfolio grows.*
 
