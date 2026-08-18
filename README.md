@@ -172,7 +172,7 @@ overall conversion rates via LAG and FIRST_VALUE window functions.
   to-first-purchase conversion, not loyalty — customers who buy once 
   are highly likely to become high-value repeat buyers
 
-**Results:** [`results/05_funnel_conversion.csv`](results/05_funnel_conversion.csv)
+**Results:** [`results/05_funnel_analysis.csv`](results/05_funnel_analysis.csv)
 
 **Techniques used:**
 - UNION ALL to stack 5 independently defined customer segments into 
