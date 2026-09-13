@@ -15,6 +15,7 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 
 ## Contents
 - [Database Schema](#database-schema)
+<<<<<<< HEAD
 - [Quick Start](#quick-start)
 - [Analyses at a Glance](#analyses-at-a-glance)
 - [1. RFM Customer Segmentation](#1-rfm-customer-segmentation)
@@ -26,6 +27,13 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 - [7. Customer Lifetime Value (CLV) Analysis](#7-customer-lifetime-value-clv-analysis)
 - [8. Market Basket Analysis](#8-market-basket-analysis)
 - [Roadmap](#roadmap)
+=======
+- [RFM Customer Segmentation](#1-rfm-customer-segmentation)
+- [MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
+- [Cohort Analysis](#3-cohort-analysis)
+- [Customer Retention Analysis](#4-customer-retention-analysis)
+- [Funnel Analysis](#5-funnel-analysis)
+>>>>>>> 873e03e86c70997a97f997aa8baf3408ee1dc7fe
 
 ## Database Schema
 
@@ -68,7 +76,7 @@ Full schema: [`schema/shopsmart_setup.sql`](schema/shopsmart_setup.sql)
 Segments customers by Recency, Frequency, and Monetary value using 
 NTILE(5) window functions and CASE-based scoring logic.
 
-**Key finding:** Among 19 repeat customers, Champions and Loyal segments 
+**Key finding:** Among 19 repeat customers, the Champions and Loyal segments 
 (47% of customers) generate 74% of total revenue. At Risk customers 
 represent ₹4.1L in recoverable revenue.
 
@@ -197,7 +205,11 @@ overall conversion rates via LAG and FIRST_VALUE window functions.
   to-first-purchase conversion, not loyalty — customers who buy once 
   are highly likely to become high-value repeat buyers
 
+<<<<<<< HEAD
 **Results:** [`results/05_funnel_conversion.csv`](results/05_funnel_conversion.csv)
+=======
+**Results:** [`results/05_funnel_analysis.csv`](results/05_funnel_analysis.csv)
+>>>>>>> 873e03e86c70997a97f997aa8baf3408ee1dc7fe
 
 **Techniques used:**
 - UNION ALL to stack 5 independently defined customer segments into 
@@ -208,6 +220,7 @@ overall conversion rates via LAG and FIRST_VALUE window functions.
 
 ---
 
+<<<<<<< HEAD
 ### 6. Rolling Average Analysis
 **Query:** [`queries/06_rolling_average_analysis.sql`](queries/06_rolling_average_analysis.sql)
 
@@ -297,6 +310,9 @@ cross-category bundling rather than a statistically strong affinity claim.
 - [x] Rolling Average Analysis
 - [x] Customer Lifetime Value (CLV) Analysis
 - [x] Market Basket Analysis
+=======
+*More analyses (Rolling Averages for Business KPIs, CLV, Market Basket Analysis) coming as this portfolio grows.*
+>>>>>>> 873e03e86c70997a97f997aa8baf3408ee1dc7fe
 
 ## Author
 
