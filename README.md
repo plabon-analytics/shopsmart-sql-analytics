@@ -278,7 +278,7 @@ spanning different categories. With small overall co-occurrence counts
 earlier analyses), this reads as a directional signal for potential 
 cross-category bundling rather than a statistically strong affinity claim.
 
-**Results:** [`results/08_market_basket_pairs.csv`](results/08_market_basket_pairs.csv)
+**Results:** [`results/08_market_basket_analysis.csv`](results/08_market_basket_analysis.csv)
 
 **Techniques used:**
 - Self-join with `oi1.product_id < oi2.product_id` to avoid duplicate/
