@@ -5,9 +5,9 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-Advanced-1e3a8a?style=flat-square)
-![Method](https://img.shields.io/badge/Method-RFM%20Segmentation-7c3aed?style=flat-square)
-![Framework](https://img.shields.io/badge/Framework-Cohort%20Analysis-0d9488?style=flat-square)
-![Status](https://img.shields.io/badge/Status-In%20Progress-16a34a?style=flat-square)
+![Analyses](https://img.shields.io/badge/Analyses-8-7c3aed?style=flat-square)
+![Techniques](https://img.shields.io/badge/Techniques-Window%20Functions%20%7C%20CTEs-0d9488?style=flat-square)
+![Status](https://img.shields.io/badge/Status-8%20Analyses%20Completed-16a34a?style=flat-square)
 ![Git](https://img.shields.io/badge/Version%20Control-Git-F05032?style=flat-square&logo=git&logoColor=white)
 ![Last Commit](https://img.shields.io/github/last-commit/plabon-analytics/shopsmart-sql-analytics?style=flat-square)
 
@@ -15,10 +15,17 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 
 ## Contents
 - [Database Schema](#database-schema)
-- [RFM Customer Segmentation](#1-rfm-customer-segmentation)
-- [MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
-- [Cohort Analysis](#3-cohort-analysis)
-- [Customer Retention Analysis](#4-customer-retention-analysis)
+- [Quick Start](#quick-start)
+- [Analyses at a Glance](#analyses-at-a-glance)
+- [1. RFM Customer Segmentation](#1-rfm-customer-segmentation)
+- [2. MoM/YoY Growth Analysis](#2-month-over-month--year-over-year-growth)
+- [3. Cohort Analysis](#3-cohort-analysis)
+- [4. Customer Retention Analysis](#4-customer-retention-analysis)
+- [5. Funnel Analysis](#5-funnel-analysis)
+- [6. Rolling Average Analysis](#6-rolling-average-analysis)
+- [7. Customer Lifetime Value (CLV) Analysis](#7-customer-lifetime-value-clv-analysis)
+- [8. Market Basket Analysis](#8-market-basket-analysis)
+- [Roadmap](#roadmap)
 
 ## Database Schema
 
@@ -33,6 +40,25 @@ real business analytics using pure SQL — no shortcuts, no downloaded datasets.
 - `marketing_campaigns` — 10 campaigns across 5 channels
 
 Full schema: [`schema/shopsmart_setup.sql`](schema/shopsmart_setup.sql)
+
+## Quick Start
+
+1. Run [`schema/shopsmart_setup.sql`](schema/shopsmart_setup.sql) in MySQL Workbench to create the database
+2. Run any query from `queries/` against the `shopsmart` schema
+3. Compare your output against the corresponding CSV in `results/`
+
+## Analyses at a Glance
+
+| # | Analysis | Key Finding | Techniques |
+|---|----------|--------------|------------|
+| 1 | RFM Segmentation | 47% of customers drive 74% of revenue | NTILE, CTEs, CASE |
+| 2 | MoM/YoY Growth | 2023 dip (-25%) → 2024 recovery (+40%) | LAG, Moving Avg, Running Total |
+| 3 | Cohort Analysis | Retention concentrated in a few long-tenured customers | PERIOD_DIFF, Pivot |
+| 4 | Customer Retention | 0% strict MoM retention — reorder cycles are 2+ months apart | Self-Join, PERIOD_DIFF |
+| 5 | Funnel Analysis | 42% signup→order conversion is the biggest leak, not loyalty | UNION ALL, LAG, FIRST_VALUE |
+| 6 | Rolling Average | Order volume is stable; revenue volatility comes from order size | Moving Average Window |
+| 7 | CLV Analysis | Fixed a formula that silently collapsed to total revenue | TIMESTAMPDIFF, CROSS JOIN |
+| 8 | Market Basket | Top pair: boAt Airdopes 141 + Himalaya Face Wash (4 orders) | Self-Join |
 
 ## Analyses
 
@@ -117,7 +143,7 @@ more continuous retention trends.
 - CASE-based pivot to reshape long-format retention data into a 
   wide heatmap view (month 0, 1, 2, 3, 6, 9, 12, 16, 19, 24, 30)
 
-  ---
+---
 
 ### 4. Customer Retention Analysis
 **Query:** [`queries/04_retention_analysis.sql`](queries/04_retention_analysis.sql)
@@ -150,9 +176,127 @@ loyalty that these stricter monthly checks miss entirely.
 - Independent sanity-check query used to verify the result against 
   raw order data before treating it as a finding, not a bug
 
-  ---
+---
 
-*More analyses (Rolling Averages for Business KPIs, CLV, Market Basket Analysis) coming as this portfolio grows.*
+### 5. Funnel Analysis
+**Query:** [`queries/05_funnel_analysis.sql`](queries/05_funnel_analysis.sql)
+
+Tracks the customer journey through 5 stages — signup, first order, 
+delivered order, repeat purchase, and high-value status (>₹50k spent) — 
+using UNION ALL to build a funnel view with step-by-step and 
+overall conversion rates via LAG and FIRST_VALUE window functions.
+
+**Key findings:**
+- The steepest drop-off happens at the very first stage: only 42% of 
+  signed-up customers (21 of 50) ever placed an order — this is the 
+  single biggest leak in the funnel, larger than every later stage combined
+- Once a customer completes one delivered order, retention through the 
+  rest of the funnel is strong: 90.5% place a 2nd order, and 94.1% of 
+  repeat buyers cross ₹50k in total spend
+- The business implication: this dataset's growth problem is acquisition-
+  to-first-purchase conversion, not loyalty — customers who buy once 
+  are highly likely to become high-value repeat buyers
+
+**Results:** [`results/05_funnel_conversion.csv`](results/05_funnel_conversion.csv)
+
+**Techniques used:**
+- UNION ALL to stack 5 independently defined customer segments into 
+  one funnel table
+- LAG() for step-over-step conversion rate
+- FIRST_VALUE() for conversion rate relative to total signups
+- HAVING clauses to define repeat-purchase and high-value thresholds
+
+---
+
+### 6. Rolling Average Analysis
+**Query:** [`queries/06_rolling_average_analysis.sql`](queries/06_rolling_average_analysis.sql)
+
+Smooths month-to-month volatility using a 3-month rolling average, 
+applied separately to revenue and order volume — a complement to the 
+MoM/YoY analysis, which measures period-over-period *change* rather 
+than the underlying *trend direction*.
+
+**Key finding:** Order volume stays remarkably stable across the entire 
+4.5-year period — the smoothed average never leaves a 1.5–2.7 orders/
+month band. Revenue, meanwhile, swings dramatically even after 
+smoothing (~₹35K to ~₹100K). This confirms that ShopSmart's revenue 
+volatility is driven almost entirely by order size, not order frequency 
+— customers aren't buying more or less often, some months just happen 
+to include larger purchases.
+
+**Results:** [`results/06_revenue_3month_rolling_average.csv`](results/06_revenue_3month_rolling_average.csv) | [`results/06_order_value_3month_rolling_average.csv`](results/06_order_value_3month_rolling_average.csv)
+
+**Techniques used:**
+- Window function moving average (`ROWS BETWEEN 2 PRECEDING AND CURRENT ROW`)
+- Applied to two distinct metrics (revenue, order volume) from the same base query
+
+---
+
+### 7. Customer Lifetime Value (CLV) Analysis
+**Query:** [`queries/07_clv_analysis.sql`](queries/07_clv_analysis.sql)
+
+Calculates CLV two ways to illustrate a common analytical pitfall: the 
+standard CLV formula (AOV × Purchase Frequency × Lifespan) mathematically 
+collapses to just total revenue when frequency is computed using each 
+customer's *own* lifespan as the denominator — the terms cancel out 
+algebraically.
+
+**Key findings:**
+- **Historical CLV** (naive formula) exactly equals total revenue for 
+  every customer — e.g., top customer Rohan Mehta shows ₹4,96,991, 
+  identical to his revenue total. It also breaks entirely for 
+  single-order customers, returning NULL, since dividing by their own 
+  0-month lifespan is undefined.
+- **Projected CLV** (fixed 12-month frequency denominator + a shared 
+  average lifespan across the customer base) produces genuinely 
+  differentiated values — the same customer's projected value is 
+  ₹1,27,699, a realistic forward estimate rather than a repackaged 
+  historical number. This version also correctly handles single-order 
+  customers instead of nulling them out.
+
+**Results:** [`results/07_historical_clv.csv`](results/07_historical_clv.csv) | [`results/07_projected_clv.csv`](results/07_projected_clv.csv)
+
+**Techniques used:**
+- TIMESTAMPDIFF for customer lifespan calculation
+- CROSS JOIN to apply a business-wide average against every customer row
+- Two formula variants included deliberately, to document and correct 
+  a common CLV calculation mistake rather than hide it
+
+---
+
+### 8. Market Basket Analysis
+**Query:** [`queries/08_market_basket_analysis.sql`](queries/08_market_basket_analysis.sql)
+
+Identifies which products are frequently purchased together using a 
+self-join on `order_items`, filtering to Delivered and Returned orders 
+to capture genuine purchase intent.
+
+**Key finding:** Top pair is boAt Airdopes 141 + Himalaya Face Wash, 
+co-occurring in 4 orders — an electronics + personal-care pairing 
+spanning different categories. With small overall co-occurrence counts 
+(the dataset's order volume limits sample size here, consistent with 
+earlier analyses), this reads as a directional signal for potential 
+cross-category bundling rather than a statistically strong affinity claim.
+
+**Results:** [`results/08_market_basket_pairs.csv`](results/08_market_basket_pairs.csv)
+
+**Techniques used:**
+- Self-join with `oi1.product_id < oi2.product_id` to avoid duplicate/
+  mirrored pairs
+- Multi-table join (order_items → orders → products ×2) to resolve 
+  readable product names
+
+---
+
+## Roadmap
+- [x] RFM Customer Segmentation
+- [x] Month-over-Month & Year-over-Year Growth
+- [x] Cohort Analysis
+- [x] Customer Retention Analysis
+- [x] Funnel Analysis
+- [x] Rolling Average Analysis
+- [x] Customer Lifetime Value (CLV) Analysis
+- [x] Market Basket Analysis
 
 ## Author
 
